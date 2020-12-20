@@ -96,16 +96,32 @@ public class PrincipalFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    VentasFrame ventasFrame;
+    InventariosFrame inventarioFrame;
+    
     private void btnVentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVentasActionPerformed
-        VentasFrame ventasFrame = new VentasFrame();
-        contenedorModulos.add(ventasFrame);
-        ventasFrame.setVisible(true);
+        if(ventasFrame == null){
+            ventasFrame = new VentasFrame();
+            contenedorModulos.add(ventasFrame);
+            contenedorModulos.getDesktopManager().maximizeFrame(ventasFrame);
+            ventasFrame.setVisible(true);
+        } else {
+        
+            contenedorModulos.getDesktopManager().maximizeFrame(ventasFrame);
+        }
+        
+        
     }//GEN-LAST:event_btnVentasActionPerformed
 
     private void btnInventariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInventariosActionPerformed
-        InventariosFrame inventarioFrame = new InventariosFrame();
-        contenedorModulos.add(inventarioFrame);
-        inventarioFrame.setVisible(true);
+        if(inventarioFrame == null){
+            inventarioFrame = new InventariosFrame();
+            contenedorModulos.add(inventarioFrame);
+            contenedorModulos.getDesktopManager().maximizeFrame(inventarioFrame);
+            inventarioFrame.setVisible(true);
+        } else {
+            contenedorModulos.getDesktopManager().maximizeFrame(inventarioFrame);
+        }
     }//GEN-LAST:event_btnInventariosActionPerformed
 
     /**
