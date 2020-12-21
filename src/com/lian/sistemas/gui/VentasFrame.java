@@ -84,19 +84,18 @@ public class VentasFrame extends javax.swing.JInternalFrame {
         jLabel4.setFont(new java.awt.Font("Ubuntu", 0, 24)); // NOI18N
         jLabel4.setText("Pago con:");
 
-        jTextField2.setText("jTextField2");
-
         jLabel5.setFont(new java.awt.Font("Ubuntu", 0, 24)); // NOI18N
         jLabel5.setText("Cambio:");
 
-        jTextField3.setText("jTextField3");
         jTextField3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField3ActionPerformed(evt);
             }
         });
 
-        jButton3.setText("jButton3");
+        jButton3.setBackground(new java.awt.Color(143, 2, 3));
+        jButton3.setFont(new java.awt.Font("Ubuntu", 0, 36)); // NOI18N
+        jButton3.setText("Realizar Venta");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
