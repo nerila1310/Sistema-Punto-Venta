@@ -5,19 +5,53 @@
  */
 package com.lian.sistemas.gui;
 
+import com.lian.sistemas.datos.baseDatos;
+import com.lian.sistemas.pojos.Producto;
+import java.util.ArrayList;
 import javax.swing.JDialog;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author neri_laredo
  */
 public class InventariosFrame extends javax.swing.JInternalFrame {
-
+    
+    DefaultTableModel modeloTabla = new DefaultTableModel();
+    baseDatos datos = new baseDatos();
+    
     /**
      * Creates new form Inventarios
      */
     public InventariosFrame() {
         initComponents();
+        cargarModeloTabla();
+    }
+    
+    private void cargarModeloTabla(){
+        modeloTabla.addColumn("Clave");
+        modeloTabla.addColumn("Nombre");
+        modeloTabla.addColumn("Unidad");
+        modeloTabla.addColumn("Precio Compra");
+        modeloTabla.addColumn("Precio Venta");
+        modeloTabla.addColumn("Existencia");
+        
+        ArrayList<Producto> listaProductos = datos.obtenerProducto();
+        
+        int numeroProductos = listaProductos.size();
+        modeloTabla.setNumRows(numeroProductos);
+        
+        
+        for(int i = 0; i < numeroProductos; i++){
+            Producto producto = listaProductos.get(i); 
+            
+            modeloTabla.setValueAt(producto, i, 0);
+            modeloTabla.setValueAt(producto.getNomProducto(), i, 1);
+            modeloTabla.setValueAt(producto.getUnidadProducto(), i, 2);
+            modeloTabla.setValueAt(producto.getPrecioCompraProducto(), i, 3);
+            modeloTabla.setValueAt(producto.getPrecioVentaProducto(), i, 4);
+            modeloTabla.setValueAt(producto.getExistenciaProducto(), i, 5);
+        }
     }
 
     /**
@@ -44,7 +78,7 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
         jTextField1 = new javax.swing.JTextField();
         jButton4 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tablaProductos = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
         jButton6 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
@@ -71,7 +105,7 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Ubuntu", 1, 48)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Ubuntu", 0, 48)); // NOI18N
         jLabel1.setText("Inventarios:");
 
         jLabel2.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
@@ -80,9 +114,14 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
         jLabel3.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
         jLabel3.setText("Nombre:");
 
+        jTextField3.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
+
         jLabel4.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
         jLabel4.setText("Existencia:");
 
+        jTextField2.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
+
+        jTextField4.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
         jTextField4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField4ActionPerformed(evt);
@@ -92,23 +131,17 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
         jLabel5.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
         jLabel5.setText("Ingresar al inventario:");
 
+        jTextField1.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
+
         jButton4.setText("Agregar");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        tablaProductos.setModel(modeloTabla);
+        jScrollPane1.setViewportView(tablaProductos);
 
         jLabel7.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
         jLabel7.setText("Buscar:");
+
+        jTextField5.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -204,7 +237,7 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
                         .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 136, Short.MAX_VALUE))
+                        .addGap(0, 138, Short.MAX_VALUE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -257,11 +290,11 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
+    private javax.swing.JTable tablaProductos;
     // End of variables declaration//GEN-END:variables
 }
