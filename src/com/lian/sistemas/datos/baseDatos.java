@@ -5,6 +5,7 @@ import com.lian.sistemas.pojos.Producto;
 import com.lian.sistemas.pojos.Proveedores;
 import com.lian.sistemas.pojos.Ventas;
 import com.lian.sistemas.pojos.detalleVenta;
+import java.sql.Statement;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.sql.Connection;
@@ -24,6 +25,7 @@ import java.util.logging.Logger;
 public class baseDatos {
 
     Connection conn = null;
+    Statement statement = null;
     PreparedStatement st = null;
     ResultSet rs = null;
     
@@ -66,6 +68,31 @@ public class baseDatos {
             ex.printStackTrace();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(baseDatos.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                st.close();
+                conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+    
+    public void actualizarInventario(Producto producto, double cantidad){
+        try {
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5433/db-sistema", "postgres", "123");
+        
+            String sql = "UPDATE cat_productos SET existencia_prod = ? WHERE id_prod = ?";
+            
+            st = conn.prepareStatement(sql);
+            
+            st.setDouble(1, cantidad);
+            st.setString(2, producto.getIdProducto());
+            
+            st.executeUpdate();
+        
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         } finally {
             try {
                 st.close();
@@ -195,11 +222,59 @@ public class baseDatos {
         try {
             conn = DriverManager.getConnection("jdbc:postgresql://localhost:5433/db-sistema", "postgres", "123");
         
-            String sql = "SELECT * FROM cat_productos";
+            String sql = "SELECT * FROM cat_productos ORDER BY nombre_prod";
 
             st = conn.prepareStatement(sql);
             
             rs = st.executeQuery();
+            
+            while (rs.next()) {                
+                
+                String id = rs.getString("id_prod");
+                String nombre = rs.getString("nombre_prod");
+                String descripcion = rs.getString("desc_prod");
+                double stock = rs.getDouble("stock_prod");
+                //File fotoProducto;
+                String unidad = rs.getString("unidad_prod");
+                double precioCompra = rs.getDouble("precio_compra_prod");
+                double precioVenta = rs.getDouble("precio_venta_prod");
+                double existencia = rs.getDouble("existencia_prod");
+                int idCategoria = rs.getInt("id_categoria_prod");
+                int idProveedor = rs.getInt("id_proveedor");
+                
+                Producto producto = new Producto(id, nombre, descripcion, stock, null ,unidad, precioCompra, 
+                                                 precioVenta, existencia, idCategoria, idProveedor);
+            
+                listaProductos.add(producto);
+            }
+        
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                st.close();
+                conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return listaProductos;
+    }
+    
+    public ArrayList<Producto> obtenerProductoPorCriterio(String criterio){
+        
+        ArrayList<Producto> listaProductos = new ArrayList<Producto>();
+        
+        try {
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5433/db-sistema", "postgres", "123");
+        
+            String sql = "SELECT * FROM cat_productos"
+                    + " WHERE id_prod LIKE '%"+criterio+"%'"
+                    + " OR nombre_prod LIKE '%"+criterio+"%'"
+                    + " ORDER BY nombre_prod";
+
+            statement = conn.createStatement();
+            rs = statement.executeQuery(sql);
             
             while (rs.next()) {                
                 
@@ -386,28 +461,4 @@ public class baseDatos {
         return listadetalleVenta;
     }
     
-    /*
-    //Prueba de conexión con la base de datos
-    public static void main(String[] args) {
-        Categoria cat = new Categoria(4, "Prueba", "Categoria de prueba para conexion de DB");
-        baseDatos base = new baseDatos();
-        base.insertarCategoria(cat);
-    }*/
-    
-    
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
