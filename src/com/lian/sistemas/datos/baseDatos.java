@@ -461,4 +461,30 @@ public class baseDatos {
         return listadetalleVenta;
     }
     
+    public void borrarProducto(Producto producto){
+    
+        try {
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5433/db-sistema", "postgres", "123");
+        
+            String sql = "DELETE FROM cat_productos WHERE id_prod = ?";
+
+            st = conn.prepareStatement(sql);
+            
+            st.setString(1, producto.getIdProducto());
+            
+            st.executeUpdate();
+        
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                st.close();
+                conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+    
+    
 }
