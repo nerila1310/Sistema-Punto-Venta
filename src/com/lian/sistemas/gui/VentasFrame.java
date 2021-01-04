@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -30,8 +32,10 @@ public class VentasFrame extends javax.swing.JInternalFrame {
     public VentasFrame() {
         initComponents();
         cargarColumnasTabla();
+        cargarListenerModeloTabla();
     }
-
+    
+    
     private void cargarColumnasTabla(){
         modeloTablaProductos.addColumn("Clave");
         modeloTablaProductos.addColumn("Nombre");
@@ -309,6 +313,24 @@ public class VentasFrame extends javax.swing.JInternalFrame {
     private void limpiarListaProductos(){
         modeloListaProductos.clear();
     }
+    
+    private void cargarListenerModeloTabla(){
+    
+        modeloTablaProductos.addTableModelListener(new TableModelListener(){
+            @Override
+            public void tableChanged(TableModelEvent e){
+                int numFilas = modeloTablaProductos.getRowCount();
+                double sumatoria = 0.0;
+                for (int i = 0; i < numFilas; i++) {
+                    String importe = (String)modeloTablaProductos.getValueAt(i, 4);
+                    sumatoria += Double.parseDouble(importe);
+                }
+                lblSumatoria.setText(String.valueOf(sumatoria));
+            }
+        });
+        
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelarVenta;
