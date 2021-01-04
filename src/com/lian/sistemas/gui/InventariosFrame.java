@@ -164,7 +164,7 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
                     if(!event.getValueIsAdjusting() && (tablaProductos.getSelectedRow()>=0)){
 
                         int filaSeleccionada = tablaProductos.getSelectedRow();
-                        Producto producto = (Producto)modeloTabla.getValueAt(filaSeleccionada, 0);
+                        Producto producto = (Producto)modeloTabla.getValueAt(filaSeleccionada, 1);
 
                         campoClave.setText(producto.getIdProducto());
                         campoNombre.setText(producto.getNomProducto());
@@ -357,8 +357,8 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
         for(int i = 0; i < numeroProductos; i++){
             Producto producto = listaProductos.get(i); 
             
-            modeloTabla.setValueAt(producto, i, 0);
-            modeloTabla.setValueAt(producto.getNomProducto(), i, 1);
+            modeloTabla.setValueAt(producto.getIdProducto(), i, 0);
+            modeloTabla.setValueAt(producto, i, 1);
             modeloTabla.setValueAt(producto.getUnidadProducto(), i, 2);
             modeloTabla.setValueAt(producto.getPrecioCompraProducto(), i, 3);
             modeloTabla.setValueAt(producto.getPrecioVentaProducto(), i, 4);

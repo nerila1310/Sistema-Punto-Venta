@@ -128,7 +128,7 @@ public class Producto {
     @Override
     
     public String toString(){
-    return this.idProducto;
+    return this.nomProducto;
     }
     
     

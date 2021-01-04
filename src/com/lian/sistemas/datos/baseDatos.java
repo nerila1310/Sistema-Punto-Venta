@@ -354,7 +354,7 @@ public class baseDatos {
             ex.printStackTrace();
         } finally {
             try {
-                st.close();
+                statement.close();
                 conn.close();
             } catch (SQLException ex) {
                 ex.printStackTrace();
