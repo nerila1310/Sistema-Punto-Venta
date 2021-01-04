@@ -2,8 +2,11 @@ package com.lian.sistemas.gui;
 
 import com.lian.sistemas.datos.baseDatos;
 import com.lian.sistemas.pojos.Producto;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -12,7 +15,12 @@ import javax.swing.table.DefaultTableModel;
  */
 public class VentasFrame extends javax.swing.JInternalFrame {
 
-    DefaultTableModel modeloTablaProductos = new DefaultTableModel();
+    DefaultTableModel modeloTablaProductos = new DefaultTableModel(){
+        @Override
+        public boolean isCellEditable(int row, int column){
+            return false;
+        }
+    };
     DefaultListModel<Producto> modeloListaProductos = new DefaultListModel<Producto>();
     baseDatos datos = new baseDatos();        
             
@@ -44,7 +52,7 @@ public class VentasFrame extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tablaVenta = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         lblImagenProd = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -65,8 +73,13 @@ public class VentasFrame extends javax.swing.JInternalFrame {
 
         setTitle("Ventas");
 
-        jTable1.setModel(modeloTablaProductos);
-        jScrollPane1.setViewportView(jTable1);
+        tablaVenta.setModel(modeloTablaProductos);
+        tablaVenta.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tablaVentaKeyReleased(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tablaVenta);
 
         jPanel1.setBackground(new java.awt.Color(46, 46, 46));
 
@@ -164,6 +177,11 @@ public class VentasFrame extends javax.swing.JInternalFrame {
 
         listaProductos.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
         listaProductos.setModel(modeloListaProductos);
+        listaProductos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                listaProductosMousePressed(evt);
+            }
+        });
         jScrollPane2.setViewportView(listaProductos);
 
         btnCancelarVenta.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
@@ -239,10 +257,14 @@ public class VentasFrame extends javax.swing.JInternalFrame {
         
         limpiarListaProductos();
         String cadenaBusqueda = campoBuscarProd.getText();
-        ArrayList<Producto> listaProductos = datos.obtenerProductoPorCriterio(cadenaBusqueda);
-      
-        for (Producto prod:listaProductos){
-            modeloListaProductos.addElement(prod);
+        if( cadenaBusqueda.isEmpty() ){
+            limpiarListaProductos();
+        }else{
+            ArrayList<Producto> listaProductos = datos.obtenerProductoPorCriterio(cadenaBusqueda);
+         
+            for (Producto prod:listaProductos){
+                modeloListaProductos.addElement(prod);
+            }
         }
     }//GEN-LAST:event_campoBuscarProdKeyReleased
 
@@ -250,6 +272,40 @@ public class VentasFrame extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_campoBuscarProdActionPerformed
 
+    private void listaProductosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listaProductosMousePressed
+        
+        JList list = (JList)evt.getSource();
+        if(evt.getClickCount() == 2){
+            int index = list.locationToIndex(evt.getPoint());
+            Producto prod = (Producto)list.getSelectedValue();
+            anadirProductoAVenta(prod);
+        }
+    }//GEN-LAST:event_listaProductosMousePressed
+
+    private void tablaVentaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tablaVentaKeyReleased
+        
+        if (evt.getKeyCode() == KeyEvent.VK_F2) {
+            int filaSeleccionada = tablaVenta.getSelectedRow();
+            String cantidad = JOptionPane.showInputDialog("Modificar cantidad: ");
+            String precioVenta = (String)modeloTablaProductos.getValueAt(filaSeleccionada, 2);
+            double importe = Double.parseDouble(cantidad) * Double.parseDouble(precioVenta);
+            String importeString = String.valueOf(importe);
+            modeloTablaProductos.setValueAt(cantidad, filaSeleccionada, 3);
+            modeloTablaProductos.setValueAt(importeString, filaSeleccionada, 4);
+        }
+        
+    }//GEN-LAST:event_tablaVentaKeyReleased
+
+    private void anadirProductoAVenta(Producto producto){
+        String claveProd = producto.getIdProducto();
+        String nombreProd = producto.getNomProducto();
+        String precioVenta = String.valueOf(producto.getPrecioVentaProducto());
+        String importe = String.valueOf(producto.getPrecioVentaProducto());
+        
+        String[] datosProductos = {claveProd, nombreProd, precioVenta, "1", importe};
+        modeloTablaProductos.addRow(datosProductos);
+    }
+    
     private void limpiarListaProductos(){
         modeloListaProductos.clear();
     }
@@ -268,11 +324,11 @@ public class VentasFrame extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JLabel lblImagenProd;
     private javax.swing.JLabel lblSumatoria;
     private javax.swing.JList<Producto> listaProductos;
     private javax.swing.JTextField pagaCon;
+    private javax.swing.JTable tablaVenta;
     // End of variables declaration//GEN-END:variables
 }
