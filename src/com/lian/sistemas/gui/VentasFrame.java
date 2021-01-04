@@ -190,9 +190,19 @@ public class VentasFrame extends javax.swing.JInternalFrame {
 
         btnCancelarVenta.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
         btnCancelarVenta.setText("Cancelar Venta");
+        btnCancelarVenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarVentaActionPerformed(evt);
+            }
+        });
 
         btnQuitarProd.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
-        btnQuitarProd.setText("Cancelar Producto");
+        btnQuitarProd.setText("Quitar Producto");
+        btnQuitarProd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnQuitarProdActionPerformed(evt);
+            }
+        });
 
         btnCorteDia.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
         btnCorteDia.setText("Corte del Día");
@@ -209,14 +219,14 @@ public class VentasFrame extends javax.swing.JInternalFrame {
                             .addComponent(campoBuscarProd)
                             .addComponent(jLabel1)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnCorteDia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnQuitarProd)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnCancelarVenta))
-                            .addComponent(btnCorteDia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(jScrollPane1))
+                                .addGap(18, 18, 18)
+                                .addComponent(btnCancelarVenta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 667, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -247,7 +257,7 @@ public class VentasFrame extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(77, Short.MAX_VALUE))
+                .addContainerGap(80, Short.MAX_VALUE))
         );
 
         pack();
@@ -299,6 +309,35 @@ public class VentasFrame extends javax.swing.JInternalFrame {
         }
         
     }//GEN-LAST:event_tablaVentaKeyReleased
+
+    private void btnQuitarProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarProdActionPerformed
+        int filaSeleccionada = tablaVenta.getSelectedRow();
+        int cantidadFilas = modeloTablaProductos.getRowCount();
+        
+        if(cantidadFilas > 0){
+            
+            int opcion = JOptionPane.showConfirmDialog(this, "¿Eliminar Producto?");
+
+            if (opcion == 0) {
+                modeloTablaProductos.removeRow(filaSeleccionada);
+            }
+        }
+    }//GEN-LAST:event_btnQuitarProdActionPerformed
+
+    private void btnCancelarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarVentaActionPerformed
+        int cantidadFilas = modeloTablaProductos.getRowCount();
+        
+        if(cantidadFilas > 0){
+        
+            int opcion = JOptionPane.showConfirmDialog(this, "¿Cancelar Venta?");
+
+            if (opcion == 0) {
+                for (int i = cantidadFilas-1; i >= 0; i--) {
+                    modeloTablaProductos.removeRow(i);
+                }
+            }
+        }
+    }//GEN-LAST:event_btnCancelarVentaActionPerformed
 
     private void anadirProductoAVenta(Producto producto){
         String claveProd = producto.getIdProducto();
