@@ -5,9 +5,11 @@ import com.lian.sistemas.pojos.Producto;
 import com.lian.sistemas.pojos.Proveedores;
 import com.lian.sistemas.pojos.Ventas;
 import com.lian.sistemas.pojos.detalleVenta;
+import java.io.File;
 import java.sql.Statement;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -75,6 +77,58 @@ public class baseDatos {
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
+        }
+    }
+    
+    public void actualizarProducto(Producto producto, boolean cambiarFoto){
+        try {
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5433/db-sistema", "postgres", "123");
+        
+            if (cambiarFoto == true) {
+                File fileFoto = producto.getFotoProducto();
+                FileInputStream fis = new FileInputStream(fileFoto);
+            
+                String sql = "UPDATE cat_productos SET desc_prod=?, stock_prod=?, foto_prod=?, unidad_prod=?, "
+                        + "precio_compra_prod=?, precio_venta_prod=?, id_categoria_prod=?, id_proveedor=?, existencia_prod=? "
+                        + "WHERE id_prod=?";
+                
+                st = conn.prepareStatement(sql);
+                
+                st.setString(1, producto.getDescProducto());
+                st.setDouble(2, producto.getStockProducto());
+                long tamanoFoto = fileFoto.length();
+                st.setBinaryStream(3, fis, tamanoFoto);
+                st.setString(4, producto.getUnidadProducto());
+                st.setDouble(5, producto.getPrecioCompraProducto());
+                st.setDouble(6, producto.getPrecioVentaProducto());
+                st.setInt(7, producto.getIdCategoria());
+                st.setInt(8, producto.getIdProveedor());
+                st.setDouble(9, producto.getExistenciaProducto());
+                st.setString(10, producto.getIdProducto());
+                
+            } else {
+                String sql = "UPDATE cat_productos SET desc_prod=?, stock_prod=?,  unidad_prod=?, "
+                        + "precio_compra_prod=?, precio_venta_prod=?, id_categoria_prod=?, id_proveedor=? "
+                        + "WHERE id_prod=?";
+                
+                st = conn.prepareStatement(sql);
+                
+                st.setString(1, producto.getDescProducto());
+                st.setDouble(2, producto.getStockProducto());
+                st.setString(3, producto.getUnidadProducto());
+                st.setDouble(4, producto.getPrecioCompraProducto());
+                st.setDouble(5, producto.getPrecioVentaProducto());
+                st.setInt(6, producto.getIdCategoria());
+                st.setInt(7, producto.getIdProveedor());
+                st.setString(8, producto.getIdProducto());
+            }
+            
+            st.executeUpdate();
+            
+        } catch (SQLException ex) {
+           ex.printStackTrace();
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
         }
     }
     
@@ -486,5 +540,35 @@ public class baseDatos {
         }
     }
     
+    public InputStream buscarFoto(Producto producto){
+        InputStream streamFoto = null;
+        
+        try {
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5433/db-sistema", "postgres", "123");
+        
+            String sql = "SELECT foto_prod FROM cat_productos WHERE id_prod = ?";
+
+            st = conn.prepareStatement(sql);
+            st.setString(1, producto.getIdProducto());
+            
+            rs = st.executeQuery();
+            
+            while (rs.next()) {                
+                streamFoto = rs.getBinaryStream("foto_prod");
+            }
+        
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                st.close();
+                conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        
+        return streamFoto;
+    }
     
 }

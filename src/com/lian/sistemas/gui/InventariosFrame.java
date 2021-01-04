@@ -7,7 +7,11 @@ package com.lian.sistemas.gui;
 
 import com.lian.sistemas.datos.baseDatos;
 import com.lian.sistemas.pojos.Producto;
+import java.awt.image.BufferedImage;
+import java.io.InputStream;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
@@ -44,6 +48,7 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
     
     private void cargarModeloTabla(){
         
+        limpiarTabla();
         ArrayList<Producto> listaProductos = datos.obtenerProducto();
         
         int numeroProductos = listaProductos.size();
@@ -170,6 +175,12 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
             }
         );
         jScrollPane1.setViewportView(tablaProductos);
+
+        btnModificarProd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarProdActionPerformed(evt);
+            }
+        });
 
         btnBorrarProd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -302,11 +313,17 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnProveedorActionPerformed
 
     private void btnNuevoArticuloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoArticuloActionPerformed
-        ProductoFrame articulo = new ProductoFrame(null,true);
+        ProductoFrame articulo = new ProductoFrame(null,true, null, null, "Nuevo Producto", false);
         articulo.setVisible(true);
         articulo.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         articulo.setLocation(600,150);
         articulo.setAlwaysOnTop(true);
+        
+        if(articulo != null ){
+            if (articulo.getInformacion() != "") {
+                cargarModeloTabla();
+            }
+        }
     }//GEN-LAST:event_btnNuevoArticuloActionPerformed
 
     private void btnCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCategoriaActionPerformed
@@ -358,6 +375,39 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
         }
         
     }//GEN-LAST:event_btnBorrarProdActionPerformed
+
+    private void btnModificarProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarProdActionPerformed
+        
+        String nombreProducto = productoSeleccionado.getNomProducto();
+        ImageIcon imagenProducto = null;
+        ProductoFrame frameProd = null;
+        
+        int opcion = JOptionPane.showConfirmDialog(this,"¿Desea modificar el producto " + nombreProducto+"?");
+        
+        if (opcion == 0) {
+            try {
+                /* Obtener imagen*/
+                InputStream is = datos.buscarFoto(productoSeleccionado);
+                BufferedImage bi = ImageIO.read(is);
+                imagenProducto = new ImageIcon(bi);
+                
+                /* Crear ventana con datos*/
+                frameProd = new ProductoFrame(null, true, productoSeleccionado, imagenProducto, "Actualizar Producto", true);
+                frameProd.setVisible(true);
+                frameProd.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                frameProd.setLocation(600,150);
+                frameProd.setAlwaysOnTop(true);
+                
+                if(frameProd != null ){
+                    if (frameProd.getInformacion() != "") {
+                        cargarModeloTabla();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }   
+    }//GEN-LAST:event_btnModificarProdActionPerformed
 
     private void limpiarTabla(){
         int numFilas = modeloTabla.getRowCount();

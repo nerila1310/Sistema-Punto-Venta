@@ -28,10 +28,12 @@ public class ProductoFrame extends javax.swing.JDialog {
     DefaultComboBoxModel<Categoria> modeloCategorias;
     DefaultComboBoxModel<Proveedores> modeloProveedores;
     baseDatos datos;
+    boolean estaActualizando;
+    String informacion;
     /**
      * Creates new form ArticuloFrame
      */
-    public ProductoFrame(java.awt.Frame parent, boolean modal) {
+    public ProductoFrame(java.awt.Frame parent, boolean modal, Producto producto, ImageIcon icon, String titulo, boolean actualizacion) {
         super(parent, modal);
         modeloCategorias = new DefaultComboBoxModel<Categoria>();
         modeloProveedores = new DefaultComboBoxModel<>();
@@ -39,7 +41,32 @@ public class ProductoFrame extends javax.swing.JDialog {
         cargarModedeloCategoria();
         cargarModeloProveedor();
         initComponents();
+        this.estaActualizando = actualizacion;
+        this.setTitle(titulo);
+        
+        if (producto != null) {
+            cargarProducto(producto, icon);
+        }
+        
     }
+    
+    public void cargarProducto(Producto producto, ImageIcon icon){
+        lblImagenArticulo.setIcon(icon);
+        campoClave.setText(producto.getIdProducto());
+        campoNombre.setText(producto.getNomProducto());
+        campoDesc.setText(producto.getDescProducto());
+        campoStock.setText(String.valueOf(producto.getStockProducto()));
+        comboUnidades.setSelectedItem(producto.getUnidadProducto());
+        campoPrecioCompra.setText(String.valueOf(producto.getPrecioCompraProducto()));
+        campoPrecioVenta.setText(String.valueOf(producto.getPrecioVentaProducto()));
+        campoExistencia.setText(String.valueOf(producto.getExistenciaProducto()));
+        
+        campoClave.setEnabled(false);
+        campoNombre.setEnabled(false);
+        
+    }
+    
+    
     
     private void cargarModedeloCategoria(){
         ArrayList<Categoria> listaCategoria;
@@ -373,18 +400,50 @@ public class ProductoFrame extends javax.swing.JDialog {
         Categoria categoria = (Categoria)comboCategoria.getSelectedItem();
         Proveedores proveedor = (Proveedores)comboProveedor.getSelectedItem();
         
-        if(imgArticuloFile == null) {
-            JOptionPane.showMessageDialog(this, "Por favor, elige una imagen");
-        }else{
-            Producto producto = new Producto(clave, nombre, descripcion, stock, imgArticuloFile, 
+        if (estaActualizando) {
+            if(imgArticuloFile == null) {
+            
+                Producto producto = new Producto(clave, nombre, descripcion, stock, null, 
                                         unidad, precioCompra, precioVenta, existencia, 
                                         categoria.getIdCategoriaProducto(), proveedor.getIdProveedor());
         
-            datos.insertarProducto(producto);
+                datos.actualizarProducto(producto, false);
+            } else {
+                
+                Producto producto = new Producto(clave, nombre, descripcion, stock, imgArticuloFile, 
+                                        unidad, precioCompra, precioVenta, existencia, 
+                                        categoria.getIdCategoriaProducto(), proveedor.getIdProveedor());
+        
+                datos.actualizarProducto(producto, true);
+                
+            }
+            
+            JOptionPane.showMessageDialog(this, "Se ha guardado el Producto");
+            this.dispose();
+            informacion = "1";
+            
         }
+        
+        if (imgArticuloFile == null) {
+                JOptionPane.showMessageDialog(this, "No ha elegido ninguna imagen");
+            }else{
+                Producto producto = new Producto(clave, nombre, descripcion, stock, imgArticuloFile, 
+                                        unidad, precioCompra, precioVenta, existencia, 
+                                        categoria.getIdCategoriaProducto(), proveedor.getIdProveedor());
+                
+                datos.insertarProducto(producto);
+                
+                JOptionPane.showMessageDialog(this, "Se ha guardado el producto");
+                this.dispose();
+                informacion = "1";
+            }
         
     }//GEN-LAST:event_btnGuardarProductoActionPerformed
 
+    public String getInformacion(){
+        return this.informacion;
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -416,7 +475,7 @@ public class ProductoFrame extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ProductoFrame dialog = new ProductoFrame(new javax.swing.JFrame(), true);
+                ProductoFrame dialog = new ProductoFrame(new javax.swing.JFrame(), true, null, new ImageIcon(), new String(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
