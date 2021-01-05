@@ -6,13 +6,11 @@ package com.lian.sistemas.pojos;
  */
 public class detalleVenta {
 
-    private int idDetalleVenta;
-    private int idVenta;
+    private Long idVenta;
     private String idProducto;
     private double cantidadVendida;
 
-    public detalleVenta(int idDetalleVenta, int idVenta, String idProducto, double cantidadVendida) {
-        this.idDetalleVenta = idDetalleVenta;
+    public detalleVenta( Long idVenta, String idProducto, double cantidadVendida) {
         this.idVenta = idVenta;
         this.idProducto = idProducto;
         this.cantidadVendida = cantidadVendida;
@@ -26,19 +24,11 @@ public class detalleVenta {
         this.cantidadVendida = cantidadVendida;
     }
 
-    public int getIdDetalleVenta() {
-        return idDetalleVenta;
-    }
-
-    public void setIdDetalleVenta(int idDetalleVenta) {
-        this.idDetalleVenta = idDetalleVenta;
-    }
-
-    public int getIdVenta() {
+    public Long getIdVenta() {
         return idVenta;
     }
 
-    public void setIdVenta(int idVenta) {
+    public void setIdVenta(Long idVenta) {
         this.idVenta = idVenta;
     }
 

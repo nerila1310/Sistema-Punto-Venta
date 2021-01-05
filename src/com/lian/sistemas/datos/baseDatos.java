@@ -214,7 +214,9 @@ public class baseDatos {
         }
     }
     
-    public void insertarVenta(Ventas venta){
+    public long insertarVenta(Ventas venta){
+        
+        long lastVal = 0l;
         
         try {
             conn = DriverManager.getConnection("jdbc:postgresql://localhost:5433/db-sistema", "postgres", "123");
@@ -229,16 +231,28 @@ public class baseDatos {
             
             st.executeUpdate();
         
+            st.close();
+            
+            st = this.conn.prepareStatement("select lastVal()");
+            
+            rs = st.executeQuery();
+            
+            while(rs.next()){
+                lastVal = rs.getLong("lastval");
+            }
+            
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
             try {
+                rs.close();
                 st.close();
                 conn.close();
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
         }
+        return lastVal;
     }
     
     public void insertarDetalleVenta(detalleVenta detalle){
@@ -246,12 +260,12 @@ public class baseDatos {
         try {
             conn = DriverManager.getConnection("jdbc:postgresql://localhost:5433/db-sistema", "postgres", "123");
         
-            String sql = "INSERT INTO detalle_venta (id_venta, id_producto, cantidad_vendida) "
+            String sql = "INSERT INTO detalle_venta (id_venta, id_prod, cantidad_vendida) "
                     + "VALUES (?, ?, ?)";
 
             st = conn.prepareStatement(sql);
             
-            st.setInt(1, detalle.getIdDetalleVenta() );
+            st.setLong(1, detalle.getIdVenta() );
             st.setString(2, detalle.getIdProducto());
             st.setDouble(3, detalle.getCantidadVendida());
             
@@ -459,7 +473,7 @@ public class baseDatos {
                 double monto = rs.getDouble("monto_venta");
                 Date fecha = rs.getDate("fecha_venta");
                 
-                Ventas venta = new Ventas(id, monto, fecha);
+                Ventas venta = new Ventas(monto, fecha);
             
                 listaVentas.add(venta);
             }
@@ -492,12 +506,11 @@ public class baseDatos {
             
             while (rs.next()) {                
                 
-                int idDetalleVenta = rs.getInt("id_detalle_venta");
-                int idVenta = rs.getInt("id_venta");
-                String producto = rs.getString("id_prod");
+                Long idVenta = rs.getLong("id_venta");
+                String idProducto = rs.getString("id_prod");
                 double cantidadVendida = rs.getDouble("cantidad_vendida");
                 
-                detalleVenta detalleVenta = new detalleVenta(idDetalleVenta, idVenta, producto, cantidadVendida);
+                detalleVenta detalleVenta = new detalleVenta(idVenta, idProducto, cantidadVendida);
             
                 listadetalleVenta.add(detalleVenta);
             }

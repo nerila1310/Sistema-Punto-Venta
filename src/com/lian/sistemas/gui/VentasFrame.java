@@ -2,7 +2,12 @@ package com.lian.sistemas.gui;
 
 import com.lian.sistemas.datos.baseDatos;
 import com.lian.sistemas.pojos.Producto;
+import com.lian.sistemas.pojos.Ventas;
+import com.lian.sistemas.pojos.detalleVenta;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.sql.Date;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
@@ -63,9 +68,7 @@ public class VentasFrame extends javax.swing.JInternalFrame {
         jLabel2 = new javax.swing.JLabel();
         lblSumatoria = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        pagaCon = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        campoPagaCon = new javax.swing.JTextField();
         btnRealizarVenta = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         campoBuscarProd = new javax.swing.JTextField();
@@ -109,18 +112,14 @@ public class VentasFrame extends javax.swing.JInternalFrame {
         jLabel4.setFont(new java.awt.Font("Ubuntu", 0, 24)); // NOI18N
         jLabel4.setText("Pago con:");
 
-        jLabel5.setFont(new java.awt.Font("Ubuntu", 0, 24)); // NOI18N
-        jLabel5.setText("Cambio:");
-
-        jTextField3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField3ActionPerformed(evt);
-            }
-        });
-
         btnRealizarVenta.setBackground(new java.awt.Color(143, 2, 3));
         btnRealizarVenta.setFont(new java.awt.Font("Ubuntu", 0, 36)); // NOI18N
         btnRealizarVenta.setText("Realizar Venta");
+        btnRealizarVenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRealizarVentaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -135,13 +134,10 @@ public class VentasFrame extends javax.swing.JInternalFrame {
                         .addComponent(lblSumatoria))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(pagaCon, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(campoPagaCon, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2)
                             .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(70, 194, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -152,13 +148,9 @@ public class VentasFrame extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblSumatoria)
                 .addGap(27, 27, 27)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(pagaCon, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(campoPagaCon, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnRealizarVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(31, Short.MAX_VALUE))
@@ -263,10 +255,6 @@ public class VentasFrame extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
-
     private void campoBuscarProdKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_campoBuscarProdKeyReleased
         
         limpiarListaProductos();
@@ -339,6 +327,55 @@ public class VentasFrame extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btnCancelarVentaActionPerformed
 
+    private void btnRealizarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarVentaActionPerformed
+        
+        ArrayList<detalleVenta> detalles = new ArrayList<detalleVenta>();
+        
+        String sumatoriaStr = lblSumatoria.getText();
+        double montoVenta = Double.parseDouble(sumatoriaStr);
+        
+        String pagoStr = campoPagaCon.getText();
+        double cambio = 0;
+        
+        if (!pagoStr.isEmpty()) {
+            double montoPago = Double.parseDouble(pagoStr);
+            cambio = montoPago-montoVenta;
+        }
+        
+        Calendar calendarioLocal = Calendar.getInstance();
+        java.util.Date fechaActual = calendarioLocal.getTime();
+        long fechaMilisegundos = fechaActual.getTime();
+        java.sql.Date fecha = new Date(fechaMilisegundos);
+        
+        Ventas venta = new Ventas(montoVenta, fecha);
+        Long idVenta = datos.insertarVenta(venta);
+        
+        int numRows = modeloTablaProductos.getRowCount();
+        
+        for (int i = 0; i < numRows; i++) {
+            String idProducto = (String)modeloTablaProductos.getValueAt(i, 0);
+            String cantidadStr = (String)modeloTablaProductos.getValueAt(i, 3);
+            double cantidad = Double.parseDouble(cantidadStr);
+            
+            detalleVenta detalle = new detalleVenta(idVenta, idProducto, cantidad);
+            datos.insertarDetalleVenta(detalle);
+            
+            detalles.add(detalle);
+        }
+        
+        for (int i = numRows-1; i >= 0; i--) {
+            modeloTablaProductos.removeRow(i);
+        }
+        
+        lblSumatoria.setText("0.00");
+        
+        if (!pagoStr.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "<html><h1 style='font-size:100px; color:blue'>"+cambio+"</h1></html>", "Usted debe dar este cambio: ",1);
+            campoPagaCon.setText("");
+        }
+        
+    }//GEN-LAST:event_btnRealizarVentaActionPerformed
+
     private void anadirProductoAVenta(Producto producto){
         String claveProd = producto.getIdProducto();
         String nombreProd = producto.getNomProducto();
@@ -377,19 +414,17 @@ public class VentasFrame extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnQuitarProd;
     private javax.swing.JButton btnRealizarVenta;
     private javax.swing.JTextField campoBuscarProd;
+    private javax.swing.JTextField campoPagaCon;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JLabel lblImagenProd;
     private javax.swing.JLabel lblSumatoria;
     private javax.swing.JList<Producto> listaProductos;
-    private javax.swing.JTextField pagaCon;
     private javax.swing.JTable tablaVenta;
     // End of variables declaration//GEN-END:variables
 }
