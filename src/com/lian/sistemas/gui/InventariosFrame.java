@@ -2,6 +2,7 @@ package com.lian.sistemas.gui;
 
 import com.lian.sistemas.datos.baseDatos;
 import com.lian.sistemas.pojos.Producto;
+import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -99,6 +100,17 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
         setTitle("Inventarios");
 
         btnNuevoArticulo.setToolTipText("Agregar Producto");
+        btnNuevoArticulo.setPreferredSize(new java.awt.Dimension(80, 80));
+        ImageIcon icon = new ImageIcon("images/producto.png");
+        Image img = icon.getImage();
+        Dimension prefSizeBtn = btnNuevoArticulo.getPreferredSize();
+        int ancho = (int) (prefSizeBtn.getWidth()*0.6);
+        int alto = (int) (prefSizeBtn.getHeight()*0.6);
+
+        Image imgRedim = img.getScaledInstance(ancho, alto, Image.SCALE_DEFAULT);
+        ImageIcon iconRedim = new ImageIcon(imgRedim);
+
+        btnNuevoArticulo.setIcon(iconRedim);
         btnNuevoArticulo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNuevoArticuloActionPerformed(evt);
@@ -106,6 +118,17 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
         });
 
         btnCategoria.setToolTipText("Agregar Categoría");
+        btnCategoria.setPreferredSize(new java.awt.Dimension(80, 80));
+        ImageIcon iconCat = new ImageIcon("images/categoria.png");
+        Image imgCat = iconCat.getImage();
+        Dimension prefSizeBtnCat = btnCategoria.getPreferredSize();
+        int anchoCat = (int)(prefSizeBtnCat.getWidth()*0.6);
+        int altoCat = (int)(prefSizeBtnCat.getHeight()*0.6);
+
+        Image imgRedimCat = imgCat.getScaledInstance(ancho, alto, Image.SCALE_DEFAULT);
+        ImageIcon iconRedimCat = new ImageIcon(imgRedimCat);
+
+        btnCategoria.setIcon(iconRedimCat);
         btnCategoria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCategoriaActionPerformed(evt);
@@ -113,6 +136,17 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
         });
 
         btnProveedor.setToolTipText("Agregar Proveedor");
+        btnProveedor.setPreferredSize(new java.awt.Dimension(100, 70));
+        ImageIcon iconPro = new ImageIcon("images/proveedor.png");
+        Image imgPro = iconPro.getImage();
+        Dimension prefSizeBtnPro = btnProveedor.getPreferredSize();
+        int anchoPro = (int)(prefSizeBtnPro.getWidth()*0.6);
+        int altoPro = (int)(prefSizeBtnPro.getHeight()*0.6);
+
+        Image imgRedimPro = imgPro.getScaledInstance(ancho, alto, Image.SCALE_DEFAULT);
+        ImageIcon iconRedimPro = new ImageIcon(imgRedimPro);
+
+        btnProveedor.setIcon(iconRedimPro);
         btnProveedor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnProveedorActionPerformed(evt);
@@ -179,12 +213,34 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
         );
         jScrollPane1.setViewportView(tablaProductos);
 
+        btnModificarProd.setPreferredSize(new java.awt.Dimension(60, 60));
+        ImageIcon iconMod = new ImageIcon("images/modificar.png");
+        Image imgMod = iconMod.getImage();
+        Dimension prefSizeBtnMod = btnModificarProd.getPreferredSize();
+        int anchoMod = (int)(prefSizeBtnMod.getWidth()*0.6);
+        int altoMod = (int)(prefSizeBtnMod.getHeight()*0.6);
+
+        Image imgRedimMod = imgMod.getScaledInstance(ancho, alto, Image.SCALE_DEFAULT);
+        ImageIcon iconRedimMod = new ImageIcon(imgRedimMod);
+
+        btnModificarProd.setIcon(iconRedimMod);
         btnModificarProd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnModificarProdActionPerformed(evt);
             }
         });
 
+        btnBorrarProd.setPreferredSize(new java.awt.Dimension(60, 60));
+        ImageIcon iconBor = new ImageIcon("images/quitar.png");
+        Image imgBor = iconBor.getImage();
+        Dimension prefSizeBtnBor = btnBorrarProd.getPreferredSize();
+        int anchoBor = (int)(prefSizeBtnBor.getWidth()*0.6);
+        int altoBor = (int)(prefSizeBtnBor.getHeight()*0.6);
+
+        Image imgRedimBor = imgBor.getScaledInstance(ancho, alto, Image.SCALE_DEFAULT);
+        ImageIcon iconRedimBor = new ImageIcon(imgRedimBor);
+
+        btnBorrarProd.setIcon(iconRedimBor);
         btnBorrarProd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBorrarProdActionPerformed(evt);
@@ -222,20 +278,20 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(47, 47, 47)
-                        .addComponent(btnNuevoArticulo, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnNuevoArticulo, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(51, 51, 51)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 959, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnModificarProd, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnBorrarProd, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(btnBorrarProd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnModificarProd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
@@ -269,9 +325,9 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnNuevoArticulo, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnNuevoArticulo, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -303,10 +359,10 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnModificarProd, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnBorrarProd, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 141, Short.MAX_VALUE))
+                        .addComponent(btnModificarProd, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnBorrarProd, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 108, Short.MAX_VALUE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
