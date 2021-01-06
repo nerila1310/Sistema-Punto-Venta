@@ -51,7 +51,14 @@ public class ProductoFrame extends javax.swing.JDialog {
     }
     
     public void cargarProducto(Producto producto, ImageIcon icon){
-        lblImagenArticulo.setIcon(icon);
+        Image imgProd = icon.getImage();
+        int anchoEtiqueta = lblImagenArticulo.getWidth();
+        int altoEtiqueta = lblImagenArticulo.getHeight();
+            
+        Image imgRedimensionada = imgProd.getScaledInstance(anchoEtiqueta, altoEtiqueta, Image.SCALE_DEFAULT);
+        ImageIcon iconoRedimensionado = new ImageIcon(imgRedimensionada);
+        
+        lblImagenArticulo.setIcon(iconoRedimensionado);
         campoClave.setText(producto.getIdProducto());
         campoNombre.setText(producto.getNomProducto());
         campoDesc.setText(producto.getDescProducto());
@@ -367,17 +374,19 @@ public class ProductoFrame extends javax.swing.JDialog {
         chooser.setFileFilter(filter);
         
         int returnVal = chooser.showOpenDialog(this);
+        
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            
-            int anchoImg = lblImagenArticulo.getWidth();
-            int altoImg = lblImagenArticulo.getHeight();
             
             imgArticuloFile = chooser.getSelectedFile();
             ImageIcon icono = new ImageIcon(imgArticuloFile.getAbsolutePath());
             Image imagen = icono.getImage();
-            imagen.getScaledInstance(anchoImg, altoImg, Image.SCALE_DEFAULT);
             
-            ImageIcon iconoRedimensionado = new ImageIcon(imagen);
+            int anchoImg = lblImagenArticulo.getWidth();
+            int altoImg = lblImagenArticulo.getHeight();
+            
+            Image imgRedimensionada = imagen.getScaledInstance(anchoImg, altoImg, Image.SCALE_DEFAULT);
+            
+            ImageIcon iconoRedimensionado = new ImageIcon(imgRedimensionada);
             
             lblImagenArticulo.setIcon(iconoRedimensionado);
         }

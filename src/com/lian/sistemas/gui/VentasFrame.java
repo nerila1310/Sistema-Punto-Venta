@@ -4,12 +4,17 @@ import com.lian.sistemas.datos.baseDatos;
 import com.lian.sistemas.pojos.Producto;
 import com.lian.sistemas.pojos.Ventas;
 import com.lian.sistemas.pojos.detalleVenta;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Calendar;
 import java.sql.Date;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.event.TableModelEvent;
@@ -281,9 +286,32 @@ public class VentasFrame extends javax.swing.JInternalFrame {
             int index = list.locationToIndex(evt.getPoint());
             Producto prod = (Producto)list.getSelectedValue();
             anadirProductoAVenta(prod);
+            desplegarFoto(prod);
         }
     }//GEN-LAST:event_listaProductosMousePressed
 
+    private void desplegarFoto(Producto producto){
+        ImageIcon imageProducto = null;
+       
+        try {
+            InputStream is = datos.buscarFoto(producto);
+            BufferedImage bi = ImageIO.read(is);
+            imageProducto = new ImageIcon(bi);
+            
+            Image imgProd = imageProducto.getImage();
+            int anchoEtiqueta = lblImagenProd.getWidth();
+            int altoEtiqueta = lblImagenProd.getHeight();
+            
+            Image imgRedimensionada = imgProd.getScaledInstance(anchoEtiqueta, altoEtiqueta, Image.SCALE_DEFAULT);
+            ImageIcon iconoRedimensionado = new ImageIcon(imgRedimensionada);
+            
+            lblImagenProd.setIcon(iconoRedimensionado);
+            
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
     private void tablaVentaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tablaVentaKeyReleased
         
         if (evt.getKeyCode() == KeyEvent.VK_F2) {

@@ -2,7 +2,9 @@ package com.lian.sistemas.gui;
 
 import com.lian.sistemas.datos.baseDatos;
 import com.lian.sistemas.pojos.Producto;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
@@ -53,8 +55,8 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
         for(int i = 0; i < numeroProductos; i++){
             Producto producto = listaProductos.get(i); 
             
-            modeloTabla.setValueAt(producto, i, 0);
-            modeloTabla.setValueAt(producto.getNomProducto(), i, 1);
+            modeloTabla.setValueAt(producto.getIdProducto(), i, 0);
+            modeloTabla.setValueAt(producto, i, 1);
             modeloTabla.setValueAt(producto.getUnidadProducto(), i, 2);
             modeloTabla.setValueAt(producto.getPrecioCompraProducto(), i, 3);
             modeloTabla.setValueAt(producto.getPrecioVentaProducto(), i, 4);
@@ -92,22 +94,25 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
         jLabel7 = new javax.swing.JLabel();
         campoBuscar = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
+        lblImage = new javax.swing.JLabel();
 
         setTitle("Inventarios");
 
+        btnNuevoArticulo.setToolTipText("Agregar Producto");
         btnNuevoArticulo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNuevoArticuloActionPerformed(evt);
             }
         });
 
+        btnCategoria.setToolTipText("Agregar Categoría");
         btnCategoria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCategoriaActionPerformed(evt);
             }
         });
 
+        btnProveedor.setToolTipText("Agregar Proveedor");
         btnProveedor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnProveedorActionPerformed(evt);
@@ -166,6 +171,8 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
                         campoNombre.setText(producto.getNomProducto());
                         campoExistencia.setText(String.valueOf(producto.getExistenciaProducto()));
                         productoSeleccionado = producto;
+
+                        desplegarFoto(producto);
                     }
                 }
             }
@@ -200,11 +207,11 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 307, Short.MAX_VALUE)
+            .addComponent(lblImage, javax.swing.GroupLayout.DEFAULT_SIZE, 307, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
+            .addComponent(lblImage, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -383,6 +390,29 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_btnBorrarProdActionPerformed
 
+    private void desplegarFoto(Producto producto){
+        ImageIcon imageProducto = null;
+       
+        try {
+            InputStream is = datos.buscarFoto(producto);
+            BufferedImage bi = ImageIO.read(is);
+            imageProducto = new ImageIcon(bi);
+            
+            Image imgProd = imageProducto.getImage();
+            int anchoEtiqueta = lblImage.getWidth();
+            int altoEtiqueta = lblImage.getHeight();
+            
+            Image imgRedimensionada = imgProd.getScaledInstance(anchoEtiqueta, altoEtiqueta, Image.SCALE_DEFAULT);
+            ImageIcon iconoRedimensionado = new ImageIcon(imgRedimensionada);
+            
+            lblImage.setIcon(iconoRedimensionado);
+            
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    
     private void btnModificarProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarProdActionPerformed
         
         String nombreProducto = productoSeleccionado.getNomProducto();
@@ -397,6 +427,8 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
                 InputStream is = datos.buscarFoto(productoSeleccionado);
                 BufferedImage bi = ImageIO.read(is);
                 imagenProducto = new ImageIcon(bi);
+                
+                
                 
                 /* Crear ventana con datos*/
                 frameProd = new ProductoFrame(null, true, productoSeleccionado, imagenProducto, "Actualizar Producto", true);
@@ -442,11 +474,11 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JLabel lblImage;
     private javax.swing.JTable tablaProductos;
     // End of variables declaration//GEN-END:variables
 }

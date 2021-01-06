@@ -337,7 +337,7 @@ public class baseDatos {
             conn = DriverManager.getConnection("jdbc:postgresql://localhost:5433/db-sistema", "postgres", "123");
         
             String sql = "SELECT * FROM cat_productos"
-                    + " WHERE id_prod LIKE '%"+criterio+"%'"
+                    + " WHERE id_prod LIKE '"+criterio+"%'"
                     + " OR nombre_prod LIKE '%"+criterio+"%'"
                     + " ORDER BY nombre_prod";
 

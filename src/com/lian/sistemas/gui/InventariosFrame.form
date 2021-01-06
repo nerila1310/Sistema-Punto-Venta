@@ -145,11 +145,17 @@
   </Layout>
   <SubComponents>
     <Component class="javax.swing.JButton" name="btnNuevoArticulo">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" value="Agregar Producto"/>
+      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNuevoArticuloActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnCategoria">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" value="Agregar Categor&#xed;a"/>
+      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCategoriaActionPerformed"/>
       </Events>
@@ -157,6 +163,9 @@
     <Component class="javax.swing.JSeparator" name="jSeparator1">
     </Component>
     <Component class="javax.swing.JButton" name="btnProveedor">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" value="Agregar Proveedor"/>
+      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnProveedorActionPerformed"/>
       </Events>
@@ -257,7 +266,7 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="tablaProductos.getSelectionModel().addListSelectionListener(&#xa;    &#xa;    new ListSelectionListener() {&#xa;    &#xa;        public void valueChanged(ListSelectionEvent event){&#xa;            &#xa;            if(!event.getValueIsAdjusting() &amp;&amp; (tablaProductos.getSelectedRow()&gt;=0)){&#xa;                &#xa;                int filaSeleccionada = tablaProductos.getSelectedRow();&#xa;                Producto producto = (Producto)modeloTabla.getValueAt(filaSeleccionada, 1);&#xa;                &#xa;                campoClave.setText(producto.getIdProducto());&#xa;                campoNombre.setText(producto.getNomProducto());&#xa;                campoExistencia.setText(String.valueOf(producto.getExistenciaProducto()));&#xa;                productoSeleccionado = producto;&#xa;            }&#xa;        }&#xa;    }&#xa;);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="tablaProductos.getSelectionModel().addListSelectionListener(&#xa;    &#xa;    new ListSelectionListener() {&#xa;    &#xa;        public void valueChanged(ListSelectionEvent event){&#xa;            &#xa;            if(!event.getValueIsAdjusting() &amp;&amp; (tablaProductos.getSelectedRow()&gt;=0)){&#xa;                &#xa;                int filaSeleccionada = tablaProductos.getSelectedRow();&#xa;                Producto producto = (Producto)modeloTabla.getValueAt(filaSeleccionada, 1);&#xa;                &#xa;                campoClave.setText(producto.getIdProducto());&#xa;                campoNombre.setText(producto.getNomProducto());&#xa;                campoExistencia.setText(String.valueOf(producto.getExistenciaProducto()));&#xa;                productoSeleccionado = producto;&#xa;                    &#xa;                desplegarFoto(producto);&#xa;            }&#xa;        }&#xa;    }&#xa;);"/>
           </AuxValues>
         </Component>
       </SubComponents>
@@ -300,17 +309,17 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="jLabel6" alignment="0" pref="307" max="32767" attributes="0"/>
+              <Component id="lblImage" alignment="0" pref="307" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="jLabel6" alignment="0" pref="154" max="32767" attributes="0"/>
+              <Component id="lblImage" alignment="0" pref="154" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JLabel" name="jLabel6">
+        <Component class="javax.swing.JLabel" name="lblImage">
         </Component>
       </SubComponents>
     </Container>
